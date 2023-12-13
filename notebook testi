@@ -1,0 +1,65 @@
+import time, os
+
+filename="notebook.txt"
+def file_checker(filename):
+    try:
+        with open(filename, 'r') as file:
+            file.close()
+    except IOError:
+        if filename=="notebook.txt":
+            print("No default notebook was found, created one.")
+            with open(filename, 'w') as file:
+                file.close()
+        else:
+            print("No notebook with that name detected, created one.")
+            with open(filename, 'w') as file:
+                file.close()
+
+def read_notes(filename):
+    try:
+        with open(filename, 'r') as file:
+            notes = file.readlines()
+            for note in notes: 
+                print(note.strip())
+    except FileNotFoundError:
+        print("ei ole")
+
+def add_note(filename):
+    note = input("Write a new note: ")
+    with open(filename, 'a') as file:
+        file.write(note + ":::" + time.strftime("%X %x") + '\n')
+
+def clear_notes(filename):
+    with open(filename, 'w') as file:
+        print("Notes deleted.")
+        file.close()
+
+def change_notebook():
+    global filename
+    filename = input("Give the name of the new file: ")
+    file_checker(filename)
+#    try:
+#        with open(filename, 'r') as file:
+#            file.close()
+
+while True:
+    file_checker(filename)
+    print(f"Now using file {filename}")
+    print("(1) Read the notebook")
+    print("(2) Add note")
+    print("(3) Empty the notebook")
+    print("(4) Change the notebook")
+    print("(5) Quit")
+
+    choice = input("Please select one: ")
+    if choice == '1':
+        read_notes(filename)
+    elif choice == '2':
+        add_note(filename)
+    elif choice == '3':
+        clear_notes(filename)
+    elif choice == '4':
+        change_notebook()
+    elif choice == '5':
+        print("Notebook shutting down, thank you.")
+        break
